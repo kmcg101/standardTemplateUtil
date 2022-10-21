@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- cap-initialize:start -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./jquery-3.2.1.min.js"></script>
+    <script src="./capHtml5.js"></script>
+    <script src="./initialize.js"></script>
+    <!-- <script src="../../_commonAssets/js/test_js.js"></script> -->
+    <script>
+      $(function () {
+        cap.injectArguments();
+      });
+    </script>
+
+    <!-- cap-initialize:end -->
+
+    <link cap-id="Avenir_Heavy_css" cap-target="href" cap-source="asset" cap-edit="common" cap-name="Avenir_Heavy" cap-category="css" rel="stylesheet" type="text/css" />
+    <link cap-id="Avenir_Roman_css" cap-target="href" cap-source="asset" cap-edit="common" cap-name="Avenir_Roman" cap-category="css" rel="stylesheet" type="text/css" />
+    <link cap-id="cssReset" cap-target="href" cap-source="asset" cap-category="css" cap-name="reset" cap-edit="common" cap-order="1" rel="stylesheet" type="text/css" />
+    <link cap-id="css" cap-target="href" cap-source="asset" cap-edit="upload" cap-order="2" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+    <div id="fullScreen" class="fullScreen elevator">
+      <div class="standardAd">
+        <div class="interactiveElements">
+          <div id="format" class="format"></div>
+          <label>Headline</label>
+          <input id="headlineInput" class="buttonText" id="myInputHeadline" onChange="inputHandler('headline')" type="text" />
+          <label>Sub Headline</label>
+          <input id="subHeadlineInput" class="buttonText" id="myInputSubHeadline" onChange="inputHandler('subHeadline')" type="text" />
+          <label>Copy</label>
+          <input id="copyInput" class="buttonText" id="myInputCopy" onChange="inputHandler('copy')" type="text" />
+          <label>Footer</label>
+          <input id="footerInput" class="buttonText" id="myInputFooter" onChange="inputHandler('footer')" type="text" />
+        </div>
+      </div>
+      <div class="playerDiv">
+        <div id="ourCanvas" class="ourCanvas">
+          <div class="workingArea">
+            <div class="headlineContainer flexContainerRow flexAlignBaseline">
+              <img onerror='this.style.display = "none"' class="inlineImageSizeEqualsText marginRightText" src="./breaking.svg" />
+
+              <div id="headline" class="headline lh-500 txt-clr-primary-900 fw-bold fs-headline ff-primary marginRightText">Many expect 2020</div>
+
+              <img onerror='this.style.display = "none"' class="inlineImageSizeEqualsText marginRightText" src="./breaking.svg" />
+
+              <div id="subHeadline" class="subHeadlineText ff-primary fs-copy fw-semi-bold">Sub Headline</div>
+            </div>
+
+            <div class="underline bg-clr-accent-900"></div>
+
+            <div id="copy" class="copy lh-700 txt-clr-primary-900 fw-regular fs-copy ff-primary">Close to 4 in 10 Americans expect a better year ahead for them personally, while another half expect things to stay about the same.</div>
+
+            <div class="footerContainer">
+              <div class="footerImageContainer">
+                <img src="./2020_Twitter_Logo_White.svg" alt="alt" />
+              </div>
+              <div id="footer" class="footer lh-500 txt-clr-primary-300 fw-regular fs-footer ff-primary">Footer</div>
+            </div>
+
+            <div class="providerLogoContainer">
+              <img src="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.designMode = "on";
+
+      const inputHandler = function (elem) {
+        let valHeadline = document.getElementById("headlineInput").value;
+        document.getElementById("headline").style.letterSpacing = valHeadline + "rem";
+
+        let valSubHeadline = document.getElementById("subHeadlineInput").value;
+        document.getElementById("subHeadline").style.letterSpacing = valSubHeadline + "rem";
+
+        let valCopy = document.getElementById("copyInput").value;
+        document.getElementById("copy").style.letterSpacing = valCopy + "rem";
+
+        let valFooter = document.getElementById("footerInput").value;
+        document.getElementById("footer").style.letterSpacing = valFooter + "rem";
+      };
+
+      let marginsHidden = false;
+      function hideMargins(e) {
+        console.log("press");
+        const el = document.getElementById("ourCanvas");
+        if (marginsHidden) {
+          ourCanvas.style.backgroundImage = "linear-gradient(rgba(255, 0, 255, 0.3) 0%, rgba(255, 0, 255, 0.3) 100%)";
+        } else {
+          ourCanvas.style.backgroundImage = "linear-gradient(rgba(255, 0, 255, 0.0) 0%, rgba(255, 0, 255, 0.0) 100%)";
+        }
+        marginsHidden = !marginsHidden;
+      }
+      function clearClassList() {
+        const fullScreen = document.getElementById("fullScreen");
+        const formatText = document.getElementById("format");
+        formatText.innerHTML = "";
+        fullScreen.classList.remove("portrait");
+        fullScreen.classList.remove("landscape");
+        fullScreen.classList.remove("elevator");
+      }
+      function determineAspectRatioClass() {
+        const cssRoot = document.querySelector(":root");
+        //let cssRootStyle = getComputedStyle(cssRoot);
+
+        let screenContainer = document.getElementById("fullScreen");
+        currentWidth = screenContainer.offsetWidth;
+        currentHeight = screenContainer.offsetHeight;
+
+        const aspectRatio = currentWidth / currentHeight;
+        //console.log("aspectRatio = ", aspectRatio);
+
+        clearClassList();
+        const formatText = document.getElementById("format");
+
+        if (aspectRatio < 1) {
+          screenContainer.classList.add("portrait");
+          formatText.innerHTML = "portrait";
+          cssRoot.style.setProperty("--copyFontSize", "31px");
+        } else if (aspectRatio < 1.7 && aspectRatio >= 1) {
+          screenContainer.classList.add("elevator");
+          formatText.innerHTML = "elevator";
+          cssRoot.style.setProperty("--copyFontSize", "22px");
+        } else {
+          screenContainer.classList.add("landscape");
+          formatText.innerHTML = "landscape";
+          cssRoot.style.setProperty("--copyFontSize", "31px");
+        }
+      }
+
+      $(document).ready(function () {
+        console.log("ready");
+        determineAspectRatioClass();
+
+        addEventListener("resize", (event) => {
+          //populateText();
+          determineAspectRatioClass();
+        });
+      });
+    </script>
+  </body>
+</html>
