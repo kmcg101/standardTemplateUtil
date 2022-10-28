@@ -1,4 +1,32 @@
+/* assume 100%, 100% width and height of the canvas we are working in
+
+vertically align footer to provider logo by making their containers the same size and vertically align 
+
+figure out math to change font size based on size of the work area and not the screen size
+
+make an entire screen preview
+
+math for provider logo and headline images
+
+check in with alan for what the html and css will look like */
+
+@font-face {
+  font-family: AvenirNext-Regular;
+  src: url(../../_commonAssets/fonts/AvenirNext-Regular-08.ttf);
+}
+@font-face {
+  font-family: AvenirNext-Bold;
+  src: url(../../_commonAssets/fonts/AvenirNext-Bold-01.ttf);
+}
+@font-face {
+  font-family: AvenirNext-Demibold;
+  src: url(../../_commonAssets/fonts/AvenirNext-DemiBold-03.ttf);
+}
+
 :root {
+  --stage-width: 640px;
+  --stage-height: 158px;
+  --stage-area: calc(--stage-width * --stage-height);
   /* COLOR */
   --clr-primary-400: #ffffff;
   --clr-primary-900: #000000;
@@ -7,11 +35,9 @@
   --clr-accent-900: #083865;
 
   /* FONT FACE  */
-  --ff-primary: Arial, Helvetica, sans-serif;
-
-  --ff-headline: var(--ff-primary);
-  --ff-copy: var(--ff-primary);
-  --ff-footer: var(--ff-primary);
+  --ff-primary: "AvenirNext-Regular";
+  --ff-bold: "AvenirNext-Bold";
+  --ff-demibold: "AvenirNext-DemiBold";
 
   /* FONT WEIGHT */
   --fw-regular: 400;
@@ -20,27 +46,23 @@
 
   /* LINE HEIGHT */
   --lh-300: 0.75;
-  --lh-500: "normal";
+  --lh-500: 1.2;
   --lh-700: 1.2;
 
-  /* LETTER SPACING */
-  --ls-300: .007em
-  --ls-500: .07em;
-  --ls700: 1em;
-
-  --copyFontSize: 22px;
+  --copyFontSize: 3.4vw;
   /* FONT SIZE for ELEVATOR  */
   /* footer */
   --fs-300: calc(0.68 * var(--copyFontSize));
+  /* --fs-300: 2.3vw; */
   /* body */
   --fs-500: var(--copyFontSize);
+  /* --fs-500: 3vw; */
   /* headline */
-  --fs-700: calc(1.09 * var(--copyFontSize));
+  --fs-700: calc(1.1 * var(--copyFontSize));
+  /* --fs-700: 5vw; */
 
-  /* FONT SIZE APPLIED TO TEXT TYPE */
-  --fs-footer: var(--fs-300);
-  --fs-copy: var(--fs-500);
-  --fs-headline: var(--fs-700);
+  /* Provider logo */
+  --providerLogoHeight: 35px;
 }
 
 /* any bit of text will be given a series of classes:  (clr, ff, fw, fs, lh, cw) */
@@ -54,12 +76,12 @@
 *,
 *:before,
 *:after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 /* interactive elements */
-
-
 
 /* utility classes */
 
@@ -67,40 +89,28 @@
 
 /* line height */
 
-#format{
+#format {
   margin-bottom: 30px;
 }
-.interactiveElements{
+.interactiveElements {
   display: flex;
   flex-direction: column;
   padding: 30px;
 }
-input{
+input {
   width: 10%;
   margin-bottom: 15px;
 }
 
-.lh-300{
-  line-height: var(--lh-300)
+.lh-300 {
+  line-height: var(--lh-300);
 }
-.lh-500{
-  line-height: var(--lh-500)
+.lh-500 {
+  line-height: var(--lh-500);
 }
-.lh-700{
-  line-height: var(--lh-700)
+.lh-700 {
+  line-height: var(--lh-700);
 }
-
-/* letter spacing */
-.ls-300{
-  letter-spacing: var(--ls-300)
-}
-.ls-500{
-  letter-spacing: var(--ls-500)
-}
-.ls-700{
-  letter-spacing: var(--ls-700)
-}
-
 
 /* text color */
 .txt-clr-primary-400 {
@@ -132,49 +142,76 @@ input{
   font-weight: var(--fw-bold);
 }
 
-/* font size */
-.fs-copy {
-  font-size: var(--fs-copy);
-}
-.fs-headline {
-  font-size: var(--fs-headline);
-}
-.fs-footer {
-  font-size: var(--fs-footer);
-}
-
 /* font family */
 .ff-primary {
   font-family: var(--ff-primary);
+  letter-spacing: 0.02em;
+}
+.ff-bold {
+  font-family: var(--ff-bold);
+  letter-spacing: 0.02em;
+}
+.ff-demibold {
+  font-family: var(--ff-demibold);
+  letter-spacing: 0.02em;
 }
 
+/* font size */
+.fs-300 {
+  font-size: var(--fs-300);
+}
+.fs-500 {
+  font-size: var(--fs-500);
+}
+.fs-700 {
+  font-size: var(--fs-700);
+}
 
 /* POSITION CLASSES */
 
 /* containers */
-.flexContainerColumn{
+.flexContainerColumn {
   display: flex;
   flex-direction: column;
 }
-.flexContainerRow{
+.flexContainerRightAligned {
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+}
+.flexContainerRow {
   display: flex;
   flex-direction: row;
 }
-.flexCenterVertical{
+.flexCenterVertical {
   align-items: center;
 }
-.flexAlignBaseline{
-  align-items:baseline;
+.flexAlignBaseline {
+  align-items: baseline;
 }
-.marginLeftText{
+.marginLeftText {
   margin-left: calc(0.4 * var(--copyFontSize));
 }
-.marginRightText{
+.marginRightText {
   margin-right: calc(0.4 * var(--copyFontSize));
 }
 
-.inlineImageSizeEqualsText{
-  height: calc(.75 * var(--copyFontSize));;
+.positionAbsoluteBottomRight {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.positionAbsoluteBottomLeft {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.positionRelative {
+  position: relative;
+}
+
+.inlineImageSizeEqualsText {
+  height: calc(0.75 * var(--copyFontSize));
   width: auto;
   align-self: baseline;
 }
@@ -194,6 +231,11 @@ html {
   width: 100%;
   container-type: inline-size;
   container-name: playerDiv;
+  background: rgba(255, 0, 0, 0.2);
+
+  display: flex;
+  align-items: center;
+  justify-items: center;
 }
 .elevator .playerDiv {
   width: 100%;
@@ -210,35 +252,65 @@ html {
 
 /* this is the area that covers the div we were given */
 .ourCanvas {
-  width: 100%;
+  width: 94%;
   height: 100%;
+  margin: auto;
   position: relative;
 }
-@container playerDiv (min-width: 0px) {
+.portrait .ourCanvas {
+  height: 95%;
+}
+.landscape .ourCanvas {
+  height: 95%;
+}
+
+.labelTextContainer {
+  display: flex;
+  font-size: 30px;
+}
+
+/* this centers it based on the width of the div */
+/* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+
+/* @container playerDiv (min-width: 0px) {
+  .ourCanvas {
+    padding-right: 0%;
+    padding-left: 0%;
+    padding-bottom: 0%;
+    padding-top: 0%;
+  }
+} */
+/* @container playerDiv (min-width: 1024px) {
   .ourCanvas {
     padding-right: 2%;
-    padding-left: 3%;
-  }
-}
-@container playerDiv (min-width: 1024px) {
-  .ourCanvas {
-    padding-right: 4%;
     padding-left: 2%;
-    padding-top: 0.68%;
+    padding-top: 0%;
+    padding-bottom: 0%;
   }
-}
+} */
 
 .underline {
   height: 2px;
   width: 99%;
   margin-top: 2px; /* 1px */
   margin-bottom: 8px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 100%);
 }
-
+.testBackgroundColor {
+  background-color: rgba(240, 8, 240, 0.3);
+}
+.providerLogoSize {
+  width: auto;
+  /* height: var(--providerLogoHeight); */
+  height: 5vh;
+  min-height: 35px;
+}
 
 .standardAd {
   position: relative;
-
 }
 .elevator .standardAd {
   height: 67%;
